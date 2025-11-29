@@ -46,3 +46,7 @@ This project is built for developers, startups, and data engineers who want to s
    ```bash
    git clone https://github.com/yourusername/apiforge.git
    cd apiforge
+command to run Backend
+python -m uvicorn app.main:app --reload
+Frontend
+npx serve .
