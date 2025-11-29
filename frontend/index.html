@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web → API Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    Web → API Generator
+  </header>
+
+  <div class="container">
+    
+    <label>Enter Website URL</label>
+    <input type="text" id="urlInput" placeholder="https://example.com" />
+
+    <label>Select API Endpoint</label>
+    <select id="endpointSelect">
+      <option value="info">Extract Info</option>
+      <option value="list">Extract List</option>
+      <option value="full">Extract Full Page</option> <!-- ✅ NEW OPTION -->
+    </select>
+
+    <button id="fetchBtn">Generate API</button>
+
+    <div id="outputBox">
+      <pre id="output"></pre>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
