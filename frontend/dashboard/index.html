@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | SmartAPI Gen</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body class="dashboard-body">
+  <div class="aurora"></div>
+  <div class="app-shell">
+    <aside class="sidebar glass">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 80 80" role="img" focusable="false">
+            <rect width="80" height="80" rx="24" fill="url(#logoGradient)" />
+            <defs>
+              <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#14141C"/>
+                <stop offset="100%" stop-color="#050507"/>
+              </linearGradient>
+            </defs>
+            <path d="M48 12h-9L17 68h9z" fill="#c58e68"/>
+            <path d="M60 32h-9L31 68h9z" fill="#d9aa86"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span class="brand-name">SmartAPI Gen</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active">
+          <span>Home</span>
+        </button>
+        <button class="nav-btn">
+          <span>Extract info</span>
+        </button>
+        <button class="nav-btn">
+          <span>Screenshot</span>
+        </button>
+        <button class="nav-btn">
+          <span>PDF export</span>
+        </button>
+      </nav>
+      <button id="logoutBtn" class="ghost-btn full">Log out</button>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-header">
+        <div>
+          <p class="eyebrow">Control center</p>
+          <h1>Generate powerful endpoints in real time.</h1>
+        </div>
+        <div class="status-chip">Status: Connected</div>
+      </header>
+
+      <section class="glass panel api-panel">
+        <div class="panel-grid">
+          <label>
+            Target URL
+            <input type="url" id="urlInput" placeholder="https://example.com" />
+          </label>
+          <label>
+            Endpoint
+            <select id="endpointSelect">
+              <option value="info">Extract Info</option>
+              <option value="list">Extract List</option>
+              <option value="full">Extract Full Page</option>
+              <option value="screenshot">Screenshot</option>
+              <option value="export-pdf">Export PDF</option>
+            </select>
+          </label>
+        </div>
+        <button id="fetchBtn" class="primary-btn">Generate API response</button>
+      </section>
+
+      <section class="glass panel output-panel">
+        <div class="panel-header">
+          <h2>Output</h2>
+          <span class="soft">Formatted results, media, or download links</span>
+        </div>
+        <div id="outputBox" class="output-box">
+          <div id="outputContent" class="output-placeholder">
+            Awaiting input. Run your first request to visualize data.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

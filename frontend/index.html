@@ -3,38 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Web → API Generator</title>
+  <title>SmartAPI Gen | Intelligence Behind Every Endpoint</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="landing">
+  <div class="aurora"></div>
+  <header class="hero">
+    <nav class="hero-nav">
+      <div class="brand">
+        <div class="brand-mark">
+          <div class="logo-bg">
+            <img src="assets/logo.png" alt="SmartAPI Gen Logo" />
+          </div>
+        </div>
+        <div class="brand-copy">
+          <span class="brand-name">SmartAPI Gen</span>
+        </div>
+      </div>
+    
+      <div class="nav-cta">
+        <a class="ghost-btn" href="auth/login.html">Log in</a>
+        <a class="primary-btn" href="auth/signup.html">Get started</a>
+      </div>
+    </nav>
+    
 
-  <header>
-    Web → API Generator
+    <div class="hero-content">
+      <div class="hero-copy">
+        <p class="eyebrow">Intelligence behind every endpoint</p>
+        <h1>Convert any website into a ready‑to‑use API stack.</h1>
+        <p class="subtitle">
+          SmartAPI Gen turns raw web pages into structured data, screenshots, and PDFs with one dashboard—designed for teams that care about polish as much as performance.
+        </p>
+        <div class="cta-row">
+          <a class="primary-btn" href="auth/signup.html">Start building</a>
+          <a class="link-btn" href="auth/login.html">I already have an account →</a>
+        </div>
+        <div class="hero-badges">
+          <span class="pill">No code changes to your site</span>
+          <span class="pill">Built for product, data, and ops teams</span>
+        </div>
+      </div>
+      <div class="hero-panel glass">
+        <div class="panel-header">
+          <span>Live preview</span>
+          <span class="status-dot">Active</span>
+        </div>
+        <div class="panel-content">
+          <p class="mono">> smartapi extract --url https://brand.com</p>
+          <p class="mono soft">payload ready · screenshot saved · pdf queued</p>
+          <div class="stat-grid">
+            <div>
+              <h3>1.2s</h3>
+              <p>Average response</p>
+            </div>
+            <div>
+              <h3>99.98%</h3>
+              <p>Uptime this month</p>
+            </div>
+            <div>
+              <h3>4.8K</h3>
+              <p>Endpoints deployed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <div class="container">
-    
-    <label>Enter Website URL</label>
-    <input type="text" id="urlInput" placeholder="https://example.com" />
-
-    <label>Select API Endpoint</label>
-    <select id="endpointSelect">
-      <option value="info">Extract Info</option>
-      <option value="list">Extract List</option>
-      <option value="full">Extract Full Page</option>
-      <option value="screenshot">Capture Screenshot</option>
-      <option value="export-pdf">Export PDF</option>
- <!-- ✅ NEW OPTION -->
-    </select>
-
-    <button id="fetchBtn">Generate API</button>
-
-    <div id="outputBox">
-      <pre id="output"></pre>
+  <section class="features" id="features">
+    <div class="section-heading">
+      <p class="eyebrow">Capabilities</p>
+      <h2>One dashboard, three powerful engines.</h2>
+      <p>Extract structured data, capture high‑fidelity screenshots, and export pixel-perfect PDFs—all without leaving the browser.</p>
     </div>
+    <div class="feature-grid">
+      <article class="feature-card glass">
+        <div class="feature-icon">⧉</div>
+        <h3>Website → API Converter</h3>
+        <p>Generate clean JSON endpoints from any public URL using curated extraction profiles and automatic pagination.</p>
+      </article>
+      <article class="feature-card glass">
+        <div class="feature-icon">📸</div>
+        <h3>Screenshot Generator</h3>
+        <p>Capture retina-ready, responsive screenshots with custom dimensions and instant download links.</p>
+      </article>
+      <article class="feature-card glass">
+        <div class="feature-icon">📄</div>
+        <h3>PDF Exporter</h3>
+        <p>Produce styled, shareable PDFs that mirror the original experience—perfect for compliance and reporting.</p>
+      </article>
+    </div>
+  </section>
 
-  </div>
+  <footer class="site-footer">
+    <p>© <span id="year"></span> SmartAPI Gen · Intelligence behind every endpoint</p>
+  </footer>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

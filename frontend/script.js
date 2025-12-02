@@ -1,70 +1,144 @@
-document.getElementById("fetchBtn").addEventListener("click", async () => {
-    const url = document.getElementById("urlInput").value.trim();
-    const endpoint = document.getElementById("endpointSelect").value;
-    const output = document.getElementById("output");
+const API_BASE = "http://127.0.0.1:8000/api/v1";
 
-    if (!url.startsWith("http")) {
-        output.textContent = "❌ Please enter a valid URL starting with https://";
-        return;
-    }
-
-    output.textContent = "⏳ Fetching data...";
-
-    try {
-        const apiURL = `http://127.0.0.1:8000/api/v1/${endpoint}?url=${encodeURIComponent(url)}`;
-        const response = await fetch(apiURL);
-
-        if (!response.ok) throw new Error("Backend error");
-
-        const data = await response.json();
-
-        // --------------------------------------------
-        // ✅ 1. SCREENSHOT HANDLING (Thum.io URL)
-        // --------------------------------------------
-        if (endpoint === "screenshot") {
-            output.innerHTML = `
-                <p>✅ Screenshot Captured</p>
-
-                <img src="${data.image_url}" 
-                     style="width:100%;max-width:650px;border:1px solid #555;border-radius:8px;margin-top:10px"/>
-
-                <br><br>
-
-                <button id="downloadBtn" 
-                        style="padding:10px 15px;background:#0ea5e9;color:white;border:none;border-radius:6px;cursor:pointer;">
-                    ⬇ Download Screenshot
-                </button>
-            `;
-
-            // Download button logic
-            document.getElementById("downloadBtn").addEventListener("click", () => {
-                window.open(data.image_url, "_blank");
-            });
-
-            return;
-        }
-
-        // --------------------------------------------
-        // ✅ 2. EXPORT PDF HANDLING
-        // --------------------------------------------
-        if (endpoint === "export-pdf") {
-            output.innerHTML = `
-                <p>📄 PDF Generated Successfully</p>
-
-                <a href="${data.file_url}" target="_blank" 
-                   style="color:#38bdf8;font-size:18px;">
-                    🔗 Click here to download PDF
-                </a>
-            `;
-            return;
-        }
-
-        // --------------------------------------------
-        // ✅ 3. ALL OTHER API RESPONSES (INFO, FULL, LIST)
-        // --------------------------------------------
-        output.textContent = JSON.stringify(data, null, 2);
-
-    } catch (error) {
-        output.textContent = "❌ Failed to fetch. Check backend or URL.";
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  initLogin();
+  initSignup();
+  initDashboard();
 });
+
+function initLogin() {
+  const loginForm = document.getElementById("loginForm");
+  if (!loginForm) return;
+
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    localStorage.setItem("loggedIn", "true");
+    window.location.href = "../dashboard/index.html";
+  });
+}
+
+function initSignup() {
+  const signupForm = document.getElementById("signupForm");
+  if (!signupForm) return;
+
+  signupForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const password = document.getElementById("signupPassword").value.trim();
+    const confirm = document.getElementById("signupConfirm").value.trim();
+
+    if (password !== confirm) {
+      alert("Passwords do not match. Please confirm and try again.");
+      return;
+    }
+
+    alert("Account created! Please log in to continue.");
+    window.location.href = "login.html";
+  });
+}
+
+function initDashboard() {
+  const fetchBtn = document.getElementById("fetchBtn");
+  if (!fetchBtn) return;
+
+  enforceAuth();
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn?.addEventListener("click", () => {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "../auth/login.html";
+  });
+
+  fetchBtn.addEventListener("click", handleApiRequest);
+}
+
+function enforceAuth() {
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "../auth/login.html";
+  }
+}
+
+async function handleApiRequest() {
+  const urlInput = document.getElementById("urlInput");
+  const endpointSelect = document.getElementById("endpointSelect");
+  const outputContent = document.getElementById("outputContent");
+
+  const targetUrl = urlInput.value.trim();
+  const endpoint = endpointSelect.value;
+
+  if (!targetUrl || !targetUrl.startsWith("http")) {
+    outputContent.innerHTML = `<p class="error">Please enter a valid URL starting with http(s)://</p>`;
+    return;
+  }
+
+  outputContent.innerHTML = `<p class="loading">Processing request...</p>`;
+
+  try {
+    const response = await fetch(
+      `${API_BASE}/${endpoint}?url=${encodeURIComponent(targetUrl)}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Backend error");
+    }
+
+    const payload = await response.json();
+
+    if (endpoint === "screenshot") {
+      renderScreenshot(outputContent, payload);
+      return;
+    }
+
+    if (endpoint === "export-pdf") {
+      renderPdfLink(outputContent, payload);
+      return;
+    }
+
+    renderJson(outputContent, payload);
+  } catch (error) {
+    outputContent.innerHTML = `<p class="error">Request failed. Check the URL or ensure the backend is running.</p>`;
+  }
+}
+
+function renderScreenshot(container, data) {
+  container.innerHTML = `
+    <p class="success">Screenshot captured successfully.</p>
+    <img src="${data.image_url}" alt="Website screenshot" class="preview-img" />
+    <button class="primary-btn download-btn" type="button">Download image</button>
+  `;
+
+  container.querySelector(".download-btn").addEventListener("click", () => {
+    window.open(data.image_url, "_blank");
+  });
+}
+
+function renderPdfLink(container, data) {
+  container.innerHTML = `
+    <p class="success">PDF generated successfully.</p>
+    <a class="pdf-link" href="${data.file_url}" target="_blank" rel="noopener">Download PDF ↗</a>
+  `;
+}
+
+function renderJson(container, data) {
+  const formatted = JSON.stringify(data, null, 2);
+  container.innerHTML = `<pre>${syntaxHighlight(formatted)}</pre>`;
+}
+
+function syntaxHighlight(json) {
+  return json
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)/g,
+      (match) => {
+        let cls = "json-number";
+        if (/^"/.test(match)) {
+          cls = /:$/.test(match) ? "json-key" : "json-string";
+        } else if (/true|false/.test(match)) {
+          cls = "json-boolean";
+        } else if (/null/.test(match)) {
+          cls = "json-null";
+        }
+        return `<span class="${cls}">${match}</span>`;
+      }
+    );
+}
